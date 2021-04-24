@@ -9,6 +9,10 @@ import passport from 'passport';
 import User from './models/user';
 
 
+var swaggerJsdoc = require("swagger-jsdoc");
+var  swaggerUi = require("swagger-ui-express");
+
+
 const jwtOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
   secretOrKey: process.env.SECRET_TOKEN
@@ -37,13 +41,49 @@ passport.use(new github.Strategy({
   )
 );
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  if ('OPTIONS' === req.method) {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 app.set('port', (process.env.PORT || 3000));
 
 app.use('/', express.static(path.join(__dirname, '../public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+import getSwagger from "./swaggerdef";
 
+var swaggerDefinition = getSwagger();
+
+const options = {
+  swaggerDefinition,
+  // Path to the API docs
+  apis: ['./server/routes.ts','./server/routes/users.ts'],
+
+}
+
+const specs = swaggerJsdoc(options);
+
+
+app.get('/api-docs/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(specs);
+});
+
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs)
+);
 
 app.use(morgan('dev'));
 
@@ -52,5 +92,7 @@ console.log('Registered Routes');
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
+
+
 
 export {app};
