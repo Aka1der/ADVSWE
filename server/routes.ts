@@ -94,7 +94,7 @@ export default function setRoutes(app: Application, passport: PassportStatic) {
   var userroute = require('./routes/users')(router, jwtAuth, checkPermission(isAdmin), checkPermission(isAdminOrOwner(userId)), protectRole)
   //var poiroute = require('./routes/pois')(router, jwtAuth, checkPermission(isAdmin), checkPermission(isAdminOrOwner(userId)));
   var poitroute = require('./routes/pois')(router, jwtAuth, checkPermission(isOwner(poiOwner)), checkPermission(isAdminOrOwner(poiOwner)));
-  var triproute = require('./routes/trips')(router, jwtAuth, checkPermission(isOwner(tripOwner)), checkPermission(isAdminOrOwner(userId)));
+  var triproute = require('./routes/trips')(router, jwtAuth, checkPermission(isOwner(tripOwner)), checkPermission(isAdminOrOwner(tripOwner)));
   //router.get('/cats/count', jwtAuth, catCtrl.count);
 //  router.route('/cats/count').get(jwtAuth, catCtrl.count);
   app.use('/api', router);
