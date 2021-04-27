@@ -35,13 +35,16 @@ export default function setRoutes(app: Application, passport: PassportStatic) {
   app.use(passport.initialize());
   // Cats
   /*
-  *  #swagger.tags = ['Users']
+  *  #swagger.tags = ['Users'], ['Trips']
   * */
   /**
    * @openapi
    * tags:
-   *   name: Users
+   * - name: Users
    *   description: User management and login
+   * - name: Trips
+   *   description: Trip management
+   *
    */
   /**
    *
@@ -87,6 +90,59 @@ export default function setRoutes(app: Application, passport: PassportStatic) {
    *     DBUser:
    *       allOf:
    *         - $ref: '#/components/schemas/User'
+   *         - $ref: '#/components/schemas/DBObject'
+   *
+   */
+
+  /**
+   *
+   *
+   * @swagger
+   * components:
+   *   schemas:
+   *     DBObject:
+   *       type: object
+   *       properties:
+   *         name:
+   *           type: string
+   *           description: The name of the trip.
+   *           example: Tahiti
+   *         description:
+   *           type: string
+   *           description: Details of the trip.
+   *           example: BobMcDonald@travellog.com
+   *         begin:
+   *           type: date
+   *           description: Start date of the trip.
+   *           example:
+   *         end:
+   *           type: date
+   *           description: End date of the trip.
+   *           example:
+   *         createdAt:
+   *           type: date
+   *           description: Creation date of the trip.
+   *           example:
+   *         creator:
+   *           type: string
+   *           enum: [local, remote]
+   *           description: The creator of the trip.
+   *         pois:
+   *           type: string
+   *           enum: [local, remote]
+   *           description: The user's provider.
+   *           example:
+   *     NewTrip:
+   *       allOf:
+   *         - $ref: '#/components/schemas/AbstractUser'
+   *         - type: object
+   *           properties:
+   *               type: string
+   *               description: The user's password.
+   *               example: verysecret
+   *     DBTrip:
+   *       allOf:
+   *         - $ref: '#/components/schemas/AbstractTrips'
    *         - $ref: '#/components/schemas/DBObject'
    *
    */

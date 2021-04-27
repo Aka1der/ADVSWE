@@ -12,4 +12,13 @@ export default class POICtrl extends BaseCtrl<IPOIDocument> {
     req.body.loc.type = 'Point';
     next();
   };
+
+  deleteByTrip = (req, res, next) =>{
+    this.model.deleteMany({_id : req.trips.pois}, res)
+      .then(() => next())
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({message: err});
+      });
+  }
 }
