@@ -81,6 +81,13 @@ export interface IPOI {
   images?: Image[];
 }
 
+export interface Image {
+  id: mongoose.Schema.Types.ObjectId,
+  description?: string,
+  uploaded: Date,
+  user: string
+}
+
 export interface LoadableDocument<T extends mongoose.Document> {
   load: (id: mongoose.Schema.Types.ObjectId) => Promise<T>;
 }
